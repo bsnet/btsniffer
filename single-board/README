@@ -1,0 +1,21 @@
+
+!IMPORTANT! You need UHD version 3.9.7 in order to compile and run this program.
+            Be sure to install and link this version before proceeding.
+
+
+To compile the program, prepare the Makefile and then build it with make.
+These are the commands to run for compiling it:
+
+    $ mkdir build
+    $ cd build
+    $ cmake ..
+    $ make
+
+Run the program with:
+
+    $ ./btsniffer 
+
+To see all available options, run:
+
+    $ ./btsniffer --help
+
