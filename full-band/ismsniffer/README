@@ -1,0 +1,68 @@
+NOTES:
+
+1. Compatibility:
+
+    Tested on Ubuntu 16.04 "xenial" 64-bit.
+
+2. Requirements:
+
+    Before compiling please install libuhd-dev:
+
+        $ apt-get install libuhd-dev
+
+    and refresh the FPGA images if required:
+
+        $ uhd_images_downloader
+
+3. Compile guide:
+
+    Create a build folder and compile:
+    (IMPORTANT! UHD version 3.9.7 is REQUIRED)
+
+        $ mkdir build
+        $ cd build
+        $ cmake ..
+        $ make
+
+4. Usage guide:
+
+    Please run "ismsniffermt --help" to have a list
+    of all options.
+
+    To capture with a single host, two B210 boards are needed.
+    First determine board serial numbers with:
+
+        $ uhd_find_devices
+
+    Then run with:
+
+        $ ./ismsniffermt \
+            --runlo --lorxgain 70 --loargs "serial=3094D6E" \
+            --runhi --hirxgain 70 --hiargs "serial=30875C0" \
+            --txgain 70
+
+    This will end up with two files
+
+        usrp_samples_lo.dat
+        usrp_samples_hi.dat
+
+5. Spectral properties of the captured files:
+
+    The loband file is 44MHz extending in range [2398-2442]MHz.
+    The hiband file is 44MHz extending in range [2438-2482]MHz.
+
+    During capture the loband board can transmit periodically a BLE
+    advertisement packet in BLE channel 19 (2444 MHz).
+    By extracting and timestamping this packet sequence from both
+    bands it is possible to have a tightly synchornised capture.
+
+6. Single device usage:
+
+    On the loband host run:
+
+        $ ./ismsniffermt --runlo --lorxgain 70 --txgain 70
+
+    On the hiband host run:
+
+        $ ./ismsniffermt --runhi --hirxgain 70
+    

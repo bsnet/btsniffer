@@ -1,0 +1,44 @@
+The code in this repository is used to test the performance of a full-band Bluetooth sniffer
+based on Software-Defined Radios which aims at de-anonymizing Classic Bluetooth devices.
+You will need *two* USRP B210 in order to run the full-band sniffer.
+
+How to compile:
+---------------
+
+First, build the ismsniffer program using CMake; instructions are in the ismsniffer subfolder.
+
+Then, compile the source files needed for the processing step:
+
+    $ cd sources
+    $ ./makeall.sh
+
+How to run the system:
+----------------------
+
+At the moment, running the full-band program requires a number of steps.
+We are currently working on code refactoring to automate operations and speed up the processing.
+Consider this as a draft version only for testing purposes.
+
+To begin with, we have to capture a wide-band trace using the ismsniffer program.
+We need a fast storage drive (e.g. SSD) or ramdisk to cope with the data stream from
+the radio frontend. The program stores on the selected drive a great amount of data (~176 MB/s),
+so we must ensure that we have enough free space. The output of this program are two binary files 
+containing the IQ samples captured from the upper and lower parts of the spectrum.
+
+To process the trace, we provide two other programs and a set of scripts to process their output.
+Processing consists of two steps: first, we generate synchronization information between the data
+streams of the two SDRs and re-align all the IQ samples; secondly, we process the wide-band
+(synchronized) trace looking for target Bluetooth sessions and reversing anonymization.
+
+To create the synchronization log between the two SDRs, i.e. between the lower and higher part
+of the radio spectrum, we run:
+
+    $ EXECPATH="./sources/synch-processing"
+    $ $EXECPATH/bledecoder <LO_FILE> <HI_FILE> | ./scripts/processsynch.pl > <LOGFILE>
+
+To analyze the trace and extract statistics on the time needed to identify a specific device,
+we run the processtrace.sh script. Be sure to adjust the variables at the beginning of the
+script to match your filesystem structure, then run:
+
+    $ ./scripts/processtrace.sh
+
