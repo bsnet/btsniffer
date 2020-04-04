@@ -1,17 +1,14 @@
-
 !IMPORTANT! You need UHD version 3.9.7 in order to compile and run this program.
-            Be sure to install and link this version before proceeding.
+            Be sure to install and link this specific version before proceeding.
 
-
-To compile the program, prepare the Makefile and then build it with make.
-These are the commands to run for compiling it:
+Build the program using CMake:
 
     $ mkdir build
     $ cd build
     $ cmake ..
     $ make
 
-Run the program with:
+To launch the system, attach the USRP B210 to the host and run:
 
     $ ./btsniffer 
 
